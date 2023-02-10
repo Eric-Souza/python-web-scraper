@@ -1,18 +1,19 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 import time
 
 print("Starting webscraper...\n")
 
-# Disables logging to avoid clutter
-options = webdriver.ChromeOptions()
-options.add_argument("--disable-logging")
-options.add_argument("--log-level=3")
-
 # Sets chromedriver
-driver_path = 'path'
-driver = webdriver.Chrome(driver_path)
+driver_path = 'utils\chromedriver.exe'
+driver_service = Service(driver_path)
+driver_options = webdriver.ChromeOptions()
+driver_options.add_argument("--disable-logging")
+driver_options.add_argument("--log-level=3")
+driver = webdriver.Chrome(service=driver_service, options=driver_options)
 
 # Opens website
 website_url = "https://registro.br/"
@@ -30,9 +31,15 @@ search_input.send_keys(Keys.RETURN)
 
 time.sleep(2)
 
-# Checks if domain exists
+# Checks if domain is available and translates to english
 is_domain_available = driver.find_element('xpath', '//*[@id="app"]/main/section/div[2]/div/p/span/strong')
-print("Domain %s %s" % (domain_name, is_domain_available.text))
+
+is_available = 'not available'
+
+if (is_domain_available.text == 'disponível'):
+  is_available = 'available'
+
+print("Domain \"%s\" %s" % (domain_name, is_available))
 
 time.sleep(8)
 driver.close()  
