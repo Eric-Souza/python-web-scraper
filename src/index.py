@@ -19,27 +19,29 @@ driver = webdriver.Chrome(service=driver_service, options=driver_options)
 website_url = "https://registro.br/"
 driver.get(website_url)  
 
-# Finds search input by id
-search_input_id = 'is-avail-field'
-search_input = driver.find_element('id', search_input_id)
-search_input.clear()
-
 # Populates search input and sends it
-domain_name = "amazon.com"
-search_input.send_keys(domain_name)
-search_input.send_keys(Keys.RETURN)
+domains = ["amazon.com", "hotmart.com.br", "uol.com.br", "pythoncourse.com.br"]
 
-time.sleep(2)
+for domain in domains:
+  # Finds search input by id and clears it
+  search_input_id = 'is-avail-field'
+  search_input = driver.find_element('id', search_input_id)
+  search_input.clear()
 
-# Checks if domain is available and translates to english
-is_domain_available = driver.find_element('xpath', '//*[@id="app"]/main/section/div[2]/div/p/span/strong')
+  # Inputs domain in search field 
+  search_input.send_keys(domain)
+  search_input.send_keys(Keys.RETURN)
 
-is_available = 'not available'
+  time.sleep(2)
 
-if (is_domain_available.text == 'disponível'):
-  is_available = 'available'
+  # Checks if domain is available and translates to english
+  is_domain_available = driver.find_element('xpath', '//*[@id="app"]/main/section/div[2]/div/p/span/strong')
 
-print("Domain \"%s\" %s" % (domain_name, is_available))
+  is_available = 'not available'
 
-time.sleep(8)
+  if (is_domain_available.text == 'disponível'):
+    is_available = 'available'
+
+  print("Domain \"%s\" %s" % (domain, is_available))
+
 driver.close()  
