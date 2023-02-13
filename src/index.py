@@ -8,13 +8,17 @@ import xlrd
 
 print("Starting webscraper...\n")
 
-# Sets xls file
+# Sets xls file (input)
 workbook_path = "utils\domain_names.xls"
 sheet_name = "Planilha1"
 workbook = xlrd.open_workbook(workbook_path)  
 sheet = workbook.sheet_by_name(sheet_name)
 rows = sheet.nrows
 columns = sheet.ncols
+
+# Sets txt file (output)
+output_file_path = "output\output.txt"
+output_file = open(output_file_path, "w")
 
 # Sets chromedriver
 driver_path = "utils\chromedriver.exe"
@@ -28,7 +32,7 @@ driver = webdriver.Chrome(service=driver_service, options=driver_options)
 website_url = "https://registro.br/"
 driver.get(website_url)  
 
-# Populates search input and sends it
+# Populates search input and sends it for each domain
 for current_row in range(0, rows):
   domain_name = sheet.cell_value(current_row, 0)
 
@@ -36,26 +40,26 @@ for current_row in range(0, rows):
   search_input_id = "is-avail-field"
   search_input = driver.find_element("id", search_input_id)
 
-  time.sleep(1)
   search_input.clear()
   time.sleep(1)
 
   # Inputs domain in search field 
   search_input.send_keys(domain_name)
-  search_input.send_keys(Keys.RETURN)
+  time.sleep(1)
 
+  search_input.send_keys(Keys.RETURN)
   time.sleep(1)
 
   # Checks if domain is available and translates to english
   is_domain_available = driver.find_element("xpath", "//*[@id=\"app\"]/main/section/div[2]/div/p/span/strong")
 
-  time.sleep(1)
-
   is_available = "not available"
-
   if (is_domain_available.text == "disponível"):
     is_available = "available"
 
-  print("Domain \"%s\" %s" % (domain_name, is_available))
+  # Outputs results 
+  output_text = "Domain \"%s\" %s \n" % (domain_name, is_available)
+  output_file.write(output_text)
 
+output_file.close()
 driver.close()  

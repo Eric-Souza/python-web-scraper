@@ -1,0 +1,6 @@
+Domain "Amazon.com.br" not available 
+Domain "Facebook.com.br" not available 
+Domain "Apple.com.br" not available 
+Domain "Hotmart.com.br" not available 
+Domain "WebRobotTest.com.br" available 
+Domain "Test1234.com.br" available 
