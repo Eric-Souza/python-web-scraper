@@ -9,7 +9,7 @@ import xlrd
 print("Starting webscraper...\n")
 
 # Sets xls file (input)
-workbook_path = "utils\domain_names.xls"
+workbook_path = r"src\domains_webscraper\utils\domain_names.xls"
 sheet_name = "Planilha1"
 workbook = xlrd.open_workbook(workbook_path)  
 sheet = workbook.sheet_by_name(sheet_name)
@@ -17,11 +17,11 @@ rows = sheet.nrows
 columns = sheet.ncols
 
 # Sets txt file (output)
-output_file_path = "output\output.txt"
+output_file_path = "src\domains_webscraper\output\output.txt"
 output_file = open(output_file_path, "w")
 
 # Sets chromedriver
-driver_path = "utils\chromedriver.exe"
+driver_path = "src\chromedriver.exe"
 driver_service = Service(driver_path)
 driver_options = webdriver.ChromeOptions()
 driver_options.add_argument("--disable-logging")
